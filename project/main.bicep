@@ -56,3 +56,23 @@ resource webapp1vnet 'Microsoft.Web/sites/networkConfig@2020-06-01' = {
     subnetResourceId: resourceId('Microsoft.Network/virtualNetworks/subnets', vnet.name, '${namepre}sn')
   }
 }
+
+resource webapp2 'Microsoft.Web/sites@2020-06-01' = {
+  name: '${namepre}wa2'
+  location: location
+  kind: 'app'
+  dependsOn: [
+    appsvc
+    vnet
+  ]
+  properties: {
+    serverFarmId: appsvc.id
+  }
+}
+
+resource webapp2vnet 'Microsoft.Web/sites/networkConfig@2020-06-01' = {
+  name: '${webapp2.name}/virtualNetwork'
+  properties: {
+    subnetResourceId: resourceId('Microsoft.Network/virtualNetworks/subnets', vnet.name, '${namepre}sn')
+  }
+}
